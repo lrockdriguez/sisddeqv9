@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Sisacabi V 9.1</title>
+</h:head>
+
+<h:body>
+
+	<h:form id="formActividad">
+		<h1>Selecciona la actividad</h1>
+		<p:dataTable widgetVar="dataTableWidgetVar" id="tableNombre"
+			var="actividad" rendered="true"
+			value="#{estadoActividadController.listaActividad}" rows="10"
+			selectionMode="single"
+			selection="#{estadoActividadController.actividad}" rowKey="#{actividad.idEstado}"
+			paginator="true"
+			paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+			rowsPerPageTemplate="10,20,30">
+			<p:ajax event="rowSelect" listener="#{estadoActividadController.onRowSelect}" />
+
+
+			<p:column headerText="Id">
+				<h:outputText value="#{actividad.idEstado}" />
+			</p:column>
+
+
+			<p:column headerText="nombre">
+				<h:outputText value="#{actividad.nombre}" />
+			</p:column>
+
+
+			<p:column headerText="Descripcion">
+				<h:outputText value="#{actividad.descripcion}" />
+			</p:column>
+
+
+
+		</p:dataTable>
+		<p:commandButton id="idButtonCrearActividad"
+		    update="idInputNombreActividad,idInputDescripcionActividad"
+			value="Crear Actividad"
+			onclick="PF('actividadDialog').show()"
+			actionListener="#{estadoActividadController.limpiarCampos}"/>
+			
+			
+		<p:commandButton id="actualizaActividad"
+			actionListener="#{estadoActividadSisddeqController.consultaActividad}"
+			onclick="PF('actividadDialog').show()"
+			value="Actualizar"
+			oncomplete="dataTableWidgetVar.filter();" />
+			
+	
+	
+	 <p:dialog modal="true" 
+	 		   showEffect="fade" 
+	 		   hideEffect="fade" 
+	 		   widgetVar="actividadDialog">
+	 		   
+        <h:panelGrid id="idPanelCrearActividad" columns="2">
+            <h:outputText value="nombre: " style="font-weight:bold" />
+            <p:inputText id="idInputNombreActividad"  value="#{estadoActividadController.nombre}"/>
+            <h:outputText value="Descripción: " style="font-weight:bold" />
+			<p:inputText id="idInputDescripcionActividad" value="#{estadoActividadController.descripcion}"/>
+        </h:panelGrid>
+        <p:commandButton id="idButtonGuardarActividad"
+        update="formActividad:tableNombre,formActividad"
+        ajax="true"
+        type="submit"
+			value="Guardar"
+			oncomplete="PF('actividadDialog').hide()"
+			actionListener="#{estadoActividadController.crearActividad}"/>
+    </p:dialog> 	
+	</h:form>
+
+
+</h:body>
+</html>
